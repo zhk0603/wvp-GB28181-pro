@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author lin
@@ -65,7 +66,10 @@ public class ApiAccessFilter extends OncePerRequestFilter {
             logDto.setType(servletRequest.getMethod());
             logDto.setUri(servletRequest.getRequestURI());
             logDto.setCreateTime(DateUtil.getNow());
-            logService.add(logDto);
+
+            CompletableFuture.runAsync(() -> {
+                logService.add(logDto);
+            });
 
 
         }
