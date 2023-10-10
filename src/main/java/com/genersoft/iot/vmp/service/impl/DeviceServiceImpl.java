@@ -564,6 +564,8 @@ public class DeviceServiceImpl implements IDeviceService {
         deviceInStore.setSsrcCheck(device.isSsrcCheck());
         //作为消息通道
         deviceInStore.setAsMessageChannel(device.isAsMessageChannel());
+
+        deviceInStore.setSwitchPrimarySubStream(device.isSwitchPrimarySubStream());
         
         // 更新redis
         deviceMapper.updateCustom(deviceInStore);
