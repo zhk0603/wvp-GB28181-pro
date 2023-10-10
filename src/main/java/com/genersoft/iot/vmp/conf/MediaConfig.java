@@ -45,8 +45,14 @@ public class MediaConfig{
     @Value("${media.http-port}")
     private Integer httpPort;
 
+    @Value("${media.show-http-port}")
+    private Integer showHttpPort;
+
     @Value("${media.http-ssl-port:0}")
     private Integer httpSSlPort = 0;
+
+    @Value("${media.show-http-ssl-port}")
+    private Integer showHttpSSlPort;
 
     @Value("${media.rtmp-port:0}")
     private Integer rtmpPort = 0;
@@ -232,5 +238,21 @@ public class MediaConfig{
             return Pattern.matches("^([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}$", ipAddress);
         }
         return false;
+    }
+
+    public Integer getShowHttpPort(Integer defaultValue) {
+        return showHttpPort != null ? showHttpPort : defaultValue;
+    }
+
+    public void setShowHttpPort(Integer showHttpPort) {
+        this.showHttpPort = showHttpPort;
+    }
+
+    public Integer getShowHttpSSlPort(Integer defaultValue) {
+        return showHttpSSlPort != null ? showHttpSSlPort : defaultValue;
+    }
+
+    public void setShowHttpSSlPort(Integer showHttpSSlPort) {
+        this.showHttpSSlPort = showHttpSSlPort;
     }
 }

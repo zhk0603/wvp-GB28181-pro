@@ -4,20 +4,17 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.genersoft.iot.vmp.common.StreamInfo;
-import com.genersoft.iot.vmp.common.StreamURL;
 import com.genersoft.iot.vmp.conf.MediaConfig;
 import com.genersoft.iot.vmp.media.zlm.ZLMRESTfulUtils;
 import com.genersoft.iot.vmp.media.zlm.dto.MediaServerItem;
 import com.genersoft.iot.vmp.media.zlm.dto.StreamAuthorityInfo;
 import com.genersoft.iot.vmp.service.IMediaServerService;
+import com.genersoft.iot.vmp.service.IMediaService;
 import com.genersoft.iot.vmp.storager.IRedisCatchStorage;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorage;
-import com.genersoft.iot.vmp.service.IMediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import java.net.URL;
 
 @Service
 public class MediaServiceImpl implements IMediaService {
@@ -97,14 +94,17 @@ public class MediaServiceImpl implements IMediaService {
 
         streamInfoResult.setIp(addr);
         streamInfoResult.setMediaServerId(mediaInfo.getId());
-        String callIdParam = ObjectUtils.isEmpty(callId)?"":"?callId=" + callId;
-        streamInfoResult.setRtmp(addr, mediaInfo.getRtmpPort(),mediaInfo.getRtmpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setRtsp(addr, mediaInfo.getRtspPort(),mediaInfo.getRtspSSLPort(), app,  stream, callIdParam);
-        streamInfoResult.setFlv(addr, mediaInfo.getHttpPort(),mediaInfo.getHttpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setFmp4(addr, mediaInfo.getHttpPort(),mediaInfo.getHttpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setHls(addr, mediaInfo.getHttpPort(),mediaInfo.getHttpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setTs(addr, mediaInfo.getHttpPort(),mediaInfo.getHttpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setRtc(addr, mediaInfo.getHttpPort(),mediaInfo.getHttpSSlPort(), app,  stream, callIdParam);
+        String callIdParam = ObjectUtils.isEmpty(callId) ? "" : "?callId=" + callId;
+        streamInfoResult.setRtmp(addr, mediaInfo.getRtmpPort(), mediaInfo.getRtmpSSlPort(), app, stream, callIdParam);
+        streamInfoResult.setRtsp(addr, mediaInfo.getRtspPort(), mediaInfo.getRtspSSLPort(), app, stream, callIdParam);
+
+        Integer httpPort = mediaConfig.getShowHttpPort(mediaInfo.getHttpPort());
+        Integer httpSSLPort = mediaConfig.getShowHttpSSlPort(mediaInfo.getHttpSSlPort());
+        streamInfoResult.setFlv(addr, httpPort, httpSSLPort, app, stream, callIdParam);
+        streamInfoResult.setFmp4(addr, httpPort, httpSSLPort, app, stream, callIdParam);
+        streamInfoResult.setHls(addr, httpPort, httpSSLPort, app, stream, callIdParam);
+        streamInfoResult.setTs(addr, httpPort, httpSSLPort, app, stream, callIdParam);
+        streamInfoResult.setRtc(addr, httpPort, httpSSLPort, app, stream, callIdParam);
 
         streamInfoResult.setTracks(tracks);
         return streamInfoResult;
