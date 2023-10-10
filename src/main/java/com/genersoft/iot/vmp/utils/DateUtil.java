@@ -2,6 +2,8 @@ package com.genersoft.iot.vmp.utils;
 
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ import java.util.Locale;
  * @author lin
  */
 public class DateUtil {
+    private final static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
      * 兼容不规范的iso8601时间格式
@@ -53,11 +56,22 @@ public class DateUtil {
     }
 	
 	public static String ISO8601Toyyyy_MM_dd_HH_mm_ss(String formatTime) {
-        return formatter.format(formatterCompatibleISO8601.parse(formatTime));
+        try {
+            return formatter.format(formatterCompatibleISO8601.parse(formatTime));
+        }
+        catch (Exception e) {
+            logger.warn("ISO8601Toyyyy_MM_dd_HH_mm_ss >>>> ", e);
+            return null;
+        }
     }
 
 	public static String urlToyyyy_MM_dd_HH_mm_ss(String formatTime) {
-        return formatter.format(urlFormatter.parse(formatTime));
+        try {
+            return formatter.format(urlFormatter.parse(formatTime));
+        } catch (Exception e) {
+            logger.warn("urlToyyyy_MM_dd_HH_mm_ss >>>> ", e);
+            return null;
+        }
     }
 
     /**
