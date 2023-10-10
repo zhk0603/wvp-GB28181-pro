@@ -61,7 +61,7 @@ public class DateUtil {
         }
         catch (Exception e) {
             logger.warn("ISO8601Toyyyy_MM_dd_HH_mm_ss >>>> ", e);
-            return null;
+            return formatter.format(LocalDateTime.now());
         }
     }
 
@@ -70,7 +70,7 @@ public class DateUtil {
             return formatter.format(urlFormatter.parse(formatTime));
         } catch (Exception e) {
             logger.warn("urlToyyyy_MM_dd_HH_mm_ss >>>> ", e);
-            return null;
+            return formatter.format(LocalDateTime.now());
         }
     }
 
