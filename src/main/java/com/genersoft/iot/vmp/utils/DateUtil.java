@@ -2,18 +2,16 @@ package com.genersoft.iot.vmp.utils;
 
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.text.ParseException;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
-
 import java.util.Locale;
 
 /**    
@@ -57,21 +55,43 @@ public class DateUtil {
 	
 	public static String ISO8601Toyyyy_MM_dd_HH_mm_ss(String formatTime) {
         try {
-            return formatter.format(formatterCompatibleISO8601.parse(formatTime));
+            TemporalAccessor temporalAccessor = formatterCompatibleISO8601.parse(formatTime);
+            return formatter.format(temporalAccessor);
         }
         catch (Exception e) {
             logger.warn("ISO8601Toyyyy_MM_dd_HH_mm_ss >>>> ", e);
-            return formatter.format(LocalDateTime.now());
+            return formatter.format(tryCorrectingDate(formatTime));
         }
     }
 
-	public static String urlToyyyy_MM_dd_HH_mm_ss(String formatTime) {
+    // 尝试修正错误的时间格式（2023-10-09T25:02:32），失败时返回当前时间
+    @NotNull
+    private static LocalDateTime tryCorrectingDate(String formatTime) {
         try {
-            return formatter.format(urlFormatter.parse(formatTime));
+            String[] ts = formatTime.split("T");
+            LocalDate date = LocalDate.parse(ts[0]);
+            String[] timeArr = ts[1].split(":");
+            long hours = getArrayValue(timeArr, 0, 0);
+            long minutes = getArrayValue(timeArr, 1, 0);
+            long seconds = getArrayValue(timeArr, 2, 0);
+            LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.MIN);
+            dateTime = dateTime.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+            return dateTime;
         } catch (Exception e) {
-            logger.warn("urlToyyyy_MM_dd_HH_mm_ss >>>> ", e);
-            return formatter.format(LocalDateTime.now());
+            return LocalDateTime.now();
         }
+    }
+
+    private static long getArrayValue(String[] array, int index, long defaultValue) {
+        if (index >= 0 && index < array.length) {
+            return Long.parseLong(array[index]);
+        }
+
+        return defaultValue;
+    }
+
+    public static String urlToyyyy_MM_dd_HH_mm_ss(String formatTime) {
+        return formatter.format(urlFormatter.parse(formatTime));
     }
 
     /**
@@ -130,5 +150,11 @@ public class DateUtil {
         }
         Instant beforeInstant = Instant.from(formatter.parse(keepaliveTime));
         return ChronoUnit.MILLIS.between(beforeInstant, Instant.now());
+    }
+
+
+    public static void main(String[] args) throws ParseException {
+        String timeStr = "2023-10-09T25:02:32";
+        LocalDateTime dateTime = tryCorrectingDate(timeStr);
     }
 }
