@@ -45,13 +45,13 @@ public class MediaConfig{
     @Value("${media.http-port}")
     private Integer httpPort;
 
-    @Value("${media.show-http-port}")
+    @Value("${media.show-http-port:}")
     private Integer showHttpPort;
 
     @Value("${media.http-ssl-port:0}")
     private Integer httpSSlPort = 0;
 
-    @Value("${media.show-http-ssl-port}")
+    @Value("${media.show-http-ssl-port:}")
     private Integer showHttpSSlPort;
 
     @Value("${media.rtmp-port:0}")
