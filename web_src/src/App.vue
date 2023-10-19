@@ -36,7 +36,9 @@ export default {
         console.error(e)
       }
       //如果没有登录状态则跳转到登录页
-      this.$router.push('/login');
+      if (!this.$route.query.token) {
+        this.$router.push('/login');
+      }
     }
   },
 
