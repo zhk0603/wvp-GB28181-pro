@@ -10,6 +10,8 @@ public class User {
     private String pushKey;
     private Role role;
 
+    private Dept dept;
+
     public int getId() {
         return id;
     }
@@ -64,5 +66,14 @@ public class User {
 
     public void setPushKey(String pushKey) {
         this.pushKey = pushKey;
+    }
+
+
+    public Dept getDept() {
+        return dept;
+    }
+
+    public void setDept(Dept dept) {
+        this.dept = dept;
     }
 }

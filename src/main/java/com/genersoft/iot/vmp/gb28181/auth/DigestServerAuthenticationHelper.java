@@ -177,10 +177,6 @@ public class DigestServerAuthenticationHelper  {
         String realm = authHeader.getRealm().trim();
         String username = authHeader.getUsername().trim();
 
-        if ( username == null || realm == null ) {
-            return false;
-        }
-
         String nonce = authHeader.getNonce();
         URI uri = authHeader.getURI();
         if (uri == null) {

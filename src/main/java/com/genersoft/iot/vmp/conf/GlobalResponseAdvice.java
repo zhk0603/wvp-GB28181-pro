@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice
 public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
 
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     public boolean supports(@NotNull MethodParameter returnType, @NotNull Class<? extends HttpMessageConverter<?>> converterType) {
@@ -34,7 +36,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
         // 排除api文档的接口，这个接口不需要统一
         String[] excludePath = {"/v3/api-docs","/api/v1","/index/hook"};
         for (String path : excludePath) {
-            if (request.getURI().getPath().startsWith(path)) {
+            if (request.getURI().getPath().startsWith(path) || pathMatcher.match("/base/**", request.getURI().getPath())) {
                 return body;
             }
         }

@@ -39,6 +39,7 @@ public class SecurityUtils {
     /**
      * 获取当前登录的所有认证信息
      * @return
+     *
      */
     public static Authentication getAuthentication(){
         SecurityContext context = SecurityContextHolder.getContext();
