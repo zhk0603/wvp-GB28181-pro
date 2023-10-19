@@ -6,6 +6,7 @@ import cn.hutool.core.util.PageUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import com.genersoft.iot.vmp.conf.security.JwtUtils;
+import com.genersoft.iot.vmp.conf.security.dto.LoginUser;
 import com.genersoft.iot.vmp.storager.dao.UserMapper;
 import com.genersoft.iot.vmp.storager.dao.dto.User;
 import com.genersoft.iot.vmp.vmanager.bean.PageInfo;
@@ -124,6 +125,7 @@ public class BaseDataHandleServiceImpl implements IBaseDataHandleService{
             JWT jwt = JWTUtil.parseToken(openToken);
 
             String loginName = (String) jwt.getPayload("userName");
+            log.info("从token中获取的登录名是：{}", loginName);
             if (StringUtils.isNotEmpty(loginName)) {
                 OpenTokenVO tokenVO = new OpenTokenVO();
                 User user = userMapper.getUserByUsername(loginName);

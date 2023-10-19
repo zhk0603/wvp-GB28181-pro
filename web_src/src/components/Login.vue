@@ -48,15 +48,36 @@ export default {
   	}
   },
   created(){
-    var that = this;
-    document.onkeydown = function(e) {
-      var key = window.event.keyCode;
-      if (key == 13) {
-        that.login();
+    if(this.$route.query.token) {
+      this.getTokenLogin()
+    } else {
+      var that = this;
+      document.onkeydown = function(e) {
+        var key = window.event.keyCode;
+        if (key == 13) {
+          that.login();
+        }
       }
     }
+
   },
   methods:{
+    getTokenLogin() {
+        const {token, redirect} = this.$route.query
+        this.$axios({
+          method: 'get',
+          url: "/base/loginByToken",
+          params: {token}
+        }).then(res => {
+          if (res.data.code === 0 ) {
+            userService.setUser(res.data.data)
+            //登录成功后
+            this.$router.push({
+              path: redirect ? redirect : '/'
+            });
+          }
+        })
+    },
 
   	//登录逻辑
   	login(){

@@ -56,7 +56,7 @@ sip:
   # 如果要监听多张网卡，可以使用逗号分隔多个IP， 例如： 192.168.1.4,10.0.0.4
   # 如果不明白，就使用0.0.0.0，大部分情况都是可以的
   # 请不要使用127.0.0.1，任何包括localhost在内的域名都是不可以的。
-  ip: 192.168.3.250
+  ip: 0.0.0.0
   # [可选] 28181服务监听的端口
   port: 8116
   # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
@@ -83,7 +83,7 @@ media:
   # [可选] wvp在国标信令中使用的ip，此ip为摄像机可以访问到的ip， 置空使用 media.ip
   sdp-ip: ${media.ip}
   # [可选] zlm服务器的hook所使用的IP, 默认使用sip.ip
-  hook-ip: 192.168.3.250
+  hook-ip: 192.168.0.58
   # [可选] zlm服务器的http.sslport, 置空使用zlm配置文件配置
   http-ssl-port: 20443
   # [可选] zlm服务器的hook.admin_params=secret
@@ -113,4 +113,13 @@ user-settings:
 # [可选] 日志配置, 一般不需要改
 logging:
   config: classpath:logback-spring-local.xml
+
+run:
+  base:
+    # 数智系统平台后台接口地址
+    url: http://192.168.0.58:9902
+    # 对接的系统编码
+    system-code:
+      - TY28181VPF
+
 
